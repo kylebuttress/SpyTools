@@ -32,5 +32,6 @@ NSString *bitArrayDescriptor(NSArray *inputArray);
 NSArray *NSBitmapImageRepToNSArray(NSBitmapImageRep *inputImage, int numberOfComponents);
 NSBitmapImageRep *NSArrayToNSBitmapImageRep(NSArray *inputArray, int numberOfComponents);
 BOOL distiguisher(NSString *inputText);
+//Testing branches
 
 @end
