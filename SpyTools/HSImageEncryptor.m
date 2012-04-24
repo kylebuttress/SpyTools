@@ -23,7 +23,7 @@
         [self setImageBitmapRep:[[NSBitmapImageRep alloc] initWithData:imageData]];
         [self setImageWidth:CGImageGetWidth([imageBitmapRep CGImage])];
         [self setImageHeight:CGImageGetHeight([imageBitmapRep CGImage])];
-        NSLog(@"[%i,%i]", imageWidth, imageHeight);
+        //NSLog(@"[%i,%i]", imageWidth, imageHeight);
     }
     return self;
 }
@@ -114,8 +114,11 @@
 
 -(NSBitmapImageRep *)encryptImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents andImage:(NSBitmapImageRep *)imageToBeEncrypted{
     
-    char *testChar = NSArrayToCharArray(NSBitmapImageRepToNSArray(imageToBeEncrypted,numberOfComponents));
+    NSArray *imageArray = NSBitmapImageRepToNSArray(imageToBeEncrypted,numberOfComponents);
+    char *testChar = NSArrayToCharArray(imageArray);
     int sizeOfString = strlen(testChar);
+    
+    //NSLog(@"Encrypting: %@",imageArray);
     
     unsigned long tempPixelValues[numberOfComponents];
     
@@ -160,6 +163,42 @@
     NSLog(@"Data has been succesfully encrypted!");
     //NSData *dataOutput = [[self imageBitmapRep] representationUsingType:NSPNGFileType properties:nil];
     return [self imageBitmapRep];
+}
+-(NSArray *)decryptImageInImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents{
+    
+    /*Declaration of reading variables*/
+    unsigned long readTempPixelValues[numberOfComponents];
+    NSMutableArray *readString = [[NSMutableArray alloc] init];
+    NSMutableArray *readCharacterBinary = [[NSMutableArray alloc] initWithCapacity:numberOfBits];
+    NSArray *readComponent = [[NSArray alloc] init];
+    
+    int readCharacterIndex = 0; 
+    /*-----Read characters from image-----*/
+    for (int j=0; j<imageHeight; j++){
+        for (int i=0; i<imageWidth; i++) {
+            
+            /*Read current pixel's component values*/
+            [imageBitmapRep getPixel:readTempPixelValues atX:i y:j];
+            
+            /*Add components LSB to character array*/
+            for(int k=0; k<numberOfComponents; k++){
+                readComponent = characterToBinaryArray(readTempPixelValues[k], numberOfBits);
+                [readCharacterBinary insertObject:[readComponent objectAtIndex:0] atIndex:readCharacterIndex];
+                
+                if (readCharacterIndex>=7) {
+                    [readString addObject:[NSNumber numberWithInt:binaryArrayToCharacter(readCharacterBinary, numberOfBits)]];
+                    readCharacterIndex = 0;
+                }else {
+                    readCharacterIndex++;                
+                }
+            }
+        }
+    }
+
+    return readString;
+    
+    //Not working yet
+    //return NSArrayToNSBitmapImageRep(readString, 3);
 }
 
 

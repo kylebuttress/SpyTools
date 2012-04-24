@@ -26,21 +26,28 @@
     
     
     /*Debug*/
-    NSData *encryptionImageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test.bmp"];
+    //Opening image to encrypt
+    NSData *encryptionImageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test.png"];
     NSBitmapImageRep *encryptedImageRep = [[NSBitmapImageRep alloc] initWithData:encryptionImageData];
-    
+    NSArray *debugImageArray = NSBitmapImageRepToNSArray(encryptedImageRep, 3);
+    //NSLog(@"%@",debugImageArray);
+    //Opening image to be encrypted
     NSData *imageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Lena.bmp"];
     HSImageEncryptor    *imageObject = [[HSImageEncryptor alloc] initWithData:imageData];
     NSBitmapImageRep    *bitmapRep = [imageObject encryptImageWithBits:8 andComponents:3 andImage:encryptedImageRep];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask, YES);
-    NSString *desktopPath = [paths objectAtIndex:0];
-    
+    //Saving encrypted image
+    //NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask, YES);
+    //NSString *desktopPath = [paths objectAtIndex:0];
     NSData *dataOutput = [bitmapRep representationUsingType:NSBMPFileType properties:nil];
-    NSString *fullWriteString = [[NSString alloc] initWithFormat:@"%@/%@",desktopPath,@"EncryptedImage.bmp"];
-    [dataOutput writeToFile:fullWriteString atomically: NO]; 
+    //NSString *fullWriteString = [[NSString alloc] initWithFormat:@"%@/%@",desktopPath,@"EncryptedImage.bmp"];
+    //[dataOutput writeToFile:fullWriteString atomically: NO]; 
     
-    //NSLog(@"%@",imageArray);
+    //Decrypting image
+    HSImageEncryptor *imageDecrypt = [[HSImageEncryptor alloc] initWithData:dataOutput];
+    NSArray *outputBitmapRep = [imageDecrypt decryptImageInImageWithBits:8 andComponents:3];
+    
+    //NSLog(@"%@", outputBitmapRep);
+    NSLog(@"%@::%@",[debugImageArray objectAtIndex:1],[outputBitmapRep objectAtIndex:4611]);
 }
 /*Global*/
 -(IBAction)processActionSelectorChange:(id)sender{
