@@ -21,6 +21,8 @@
 -(NSBitmapImageRep *)encryptImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents andString:(NSString *)stringToBeEncrypted; 
 -(NSString *)decryptImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents; 
 
+-(NSBitmapImageRep *)encryptImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents andImage:(NSBitmapImageRep *)imageToBeEncrypted; 
+
 
 @property (strong) NSBitmapImageRep *imageBitmapRep;
 @property int imageHeight;

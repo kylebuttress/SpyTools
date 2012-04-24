@@ -23,6 +23,24 @@
     
     [self processActionSelectorChange:self];
     [self processSequence:self];
+    
+    
+    /*Debug*/
+    NSData *encryptionImageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test.bmp"];
+    NSBitmapImageRep *encryptedImageRep = [[NSBitmapImageRep alloc] initWithData:encryptionImageData];
+    
+    NSData *imageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Lena.bmp"];
+    HSImageEncryptor    *imageObject = [[HSImageEncryptor alloc] initWithData:imageData];
+    NSBitmapImageRep    *bitmapRep = [imageObject encryptImageWithBits:8 andComponents:3 andImage:encryptedImageRep];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask, YES);
+    NSString *desktopPath = [paths objectAtIndex:0];
+    
+    NSData *dataOutput = [bitmapRep representationUsingType:NSBMPFileType properties:nil];
+    NSString *fullWriteString = [[NSString alloc] initWithFormat:@"%@/%@",desktopPath,@"EncryptedImage.bmp"];
+    [dataOutput writeToFile:fullWriteString atomically: NO]; 
+    
+    //NSLog(@"%@",imageArray);
 }
 /*Global*/
 -(IBAction)processActionSelectorChange:(id)sender{

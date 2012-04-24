@@ -112,4 +112,55 @@
     return readNSString;
 }
 
+-(NSBitmapImageRep *)encryptImageWithBits:(int)numberOfBits andComponents:(int)numberOfComponents andImage:(NSBitmapImageRep *)imageToBeEncrypted{
+    
+    char *testChar = NSArrayToCharArray(NSBitmapImageRepToNSArray(imageToBeEncrypted,numberOfComponents));
+    int sizeOfString = strlen(testChar);
+    
+    unsigned long tempPixelValues[numberOfComponents];
+    
+    int characterBitsIndex = 0;
+    int characterNumberIndex = 0;
+    
+    NSMutableArray *characterBinary = [[NSMutableArray alloc] initWithArray:characterToBinaryArray(testChar[characterNumberIndex], numberOfBits)];
+    for (int j=0; j<imageHeight; j++) {
+        for (int i=0; i<imageWidth; i++) {
+            /*Get current index components*/
+            [[self imageBitmapRep] getPixel:tempPixelValues atX:i y:j];
+            /*Process pixel's color components*/
+            for (int k=0; k<numberOfComponents; k++) {
+                
+                /*Check if character bit index is higher or equal to the number of allowed bits*/
+                if (characterBitsIndex>=(numberOfBits)) {
+                    /*Reset bit index and increment character index*/
+                    characterBitsIndex = 0;
+                    characterNumberIndex++;
+                    /*Move to next character*/
+                    characterBinary = characterToBinaryArray(testChar[characterNumberIndex], numberOfBits);
+                }
+                
+                /*Conversion of color component to binary array*/
+                NSArray *tempComponentBitArray = [[NSArray alloc] initWithArray:characterToBinaryArray(tempPixelValues[k], numberOfBits)];
+                /*Modification of the original pixel according to the character's current bit*/
+                NSArray *tempModifiedBitArray = [[NSArray alloc] initWithArray:setBitWithArrayValue(tempComponentBitArray, characterBinary, characterBitsIndex, 0)];
+                /*Conversion of the color component's bits to an integer and assignement to the components array*/
+                tempPixelValues[k]=binaryArrayToCharacter(tempModifiedBitArray, numberOfBits);
+                
+                /*Check if the string has ended so that the array is repeated*/
+                if (characterNumberIndex>=sizeOfString) {
+                    characterNumberIndex = 0;
+                }
+                characterBitsIndex++;
+            }
+            
+            [[self imageBitmapRep] setPixel:tempPixelValues atX:i y:j];
+        }
+    }
+    free(testChar);
+    NSLog(@"Data has been succesfully encrypted!");
+    //NSData *dataOutput = [[self imageBitmapRep] representationUsingType:NSPNGFileType properties:nil];
+    return [self imageBitmapRep];
+}
+
+
 @end

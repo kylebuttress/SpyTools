@@ -227,8 +227,5 @@ NSBitmapImageRep *NSArrayToNSBitmapImageRep(NSArray *inputArray, int numberOfCom
     
     return image;
 }
-BOOL distiguisher(NSString *inputText){
-    return TRUE;
-}
 
 @end
