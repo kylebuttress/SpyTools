@@ -206,15 +206,15 @@ NSArray *NSBitmapImageRepToNSArray(NSBitmapImageRep *inputImage, int numberOfCom
     return imageArray;    
 }
 NSBitmapImageRep *NSArrayToNSBitmapImageRep(NSArray *inputArray, int numberOfComponents){
-    NSBitmapImageRep *image = [[NSBitmapImageRep alloc] init];
     
     int imageWidth = [[inputArray objectAtIndex:0] intValue];
     int imageHeight = [[inputArray objectAtIndex:1] intValue];
+        
+    NSBitmapImageRep *image = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:imageWidth pixelsHigh:imageHeight bitsPerSample:8 samplesPerPixel:numberOfComponents hasAlpha:NO isPlanar:YES colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:0 bitsPerPixel:8];
     
     unsigned long tempPixelValues[numberOfComponents];
     
     int arrayIndex = 2;
-    
     for (int j=0; j<imageHeight; j++) {
         for (int i=0; i<imageWidth; i++) {
             for (int k=0; k<numberOfComponents; k++) {
@@ -224,7 +224,6 @@ NSBitmapImageRep *NSArrayToNSBitmapImageRep(NSArray *inputArray, int numberOfCom
             [image setPixel:tempPixelValues atX:i y:j];
         }
     }
-    
     return image;
 }
 
