@@ -31,12 +31,12 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory,NSUserDomainMask, YES);
     NSString *desktopPath = [paths objectAtIndex:0];
     //Opening image to encrypt
-    NSData *encryptionImageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test.png"];
+    NSData *encryptionImageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test6.png"];
     NSBitmapImageRep *encryptedImageRep = [[NSBitmapImageRep alloc] initWithData:encryptionImageData];
-    //NSArray *debugImageArray = NSBitmapImageRepToNSArray(encryptedImageRep, 3);
+    NSArray *debugImageArray = NSBitmapImageRepToNSArray(encryptedImageRep, 3);
     //NSLog(@"%@",debugImageArray);
-    //Opening image to be encrypted
-    NSData *imageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Lena.bmp"];
+    //Opening image to be encrypted in
+    NSData *imageData = [[NSData alloc] initWithContentsOfFile:@"/Users/Chip/Pictures/Test2.png"];
     HSImageEncryptor    *imageObject = [[HSImageEncryptor alloc] initWithData:imageData];
     NSBitmapImageRep    *bitmapRep = [imageObject encryptImageWithBits:8 andComponents:3 andImage:encryptedImageRep];
     //Saving encrypted image
@@ -46,15 +46,15 @@
     //Decrypting image
     HSImageEncryptor *imageDecrypt = [[HSImageEncryptor alloc] initWithData:dataOutput];
     NSArray *outputArray = [imageDecrypt decryptImageInImageWithBits:8 andComponents:3];
-    NSBitmapImageRep *outputBitmap = NSArrayToNSBitmapImageRep(outputArray, 3);
+    //NSBitmapImageRep *outputBitmap = NSArrayToNSBitmapImageRep(outputArray, 3);
     //Saving decrypted image
-    NSData *dataOutput2 = [outputBitmap representationUsingType:NSBMPFileType properties:nil];
-    NSString *fullWriteString2 = [[NSString alloc] initWithFormat:@"%@/%@",desktopPath,@"DecryptedImage.bmp"];
-    [dataOutput2 writeToFile:fullWriteString2 atomically: NO];  
+    //NSData *dataOutput2 = [outputBitmap representationUsingType:NSBMPFileType properties:nil];
+    //NSString *fullWriteString2 = [[NSString alloc] initWithFormat:@"%@/%@",desktopPath,@"DecryptedImage.bmp"];
+    //[dataOutput2 writeToFile:fullWriteString2 atomically: NO];  
     
     
-    //NSLog(@"%@", outputBitmapRep);
-    //NSLog(@"%@::%@",[debugImageArray objectAtIndex:1],[outputArray objectAtIndex:4611]);
+    NSLog(@"{%i,%i}",[imageDecrypt imageWidth],[imageDecrypt imageHeight]);
+    NSLog(@"\n[%@::%@]\n[%@::%@]\n[%@::%@]\n[%@::%@]\n[%@::%@]\n",[debugImageArray objectAtIndex:0],[outputArray objectAtIndex:0],[debugImageArray objectAtIndex:1],[outputArray objectAtIndex:1],[debugImageArray objectAtIndex:2],[outputArray objectAtIndex:2],[debugImageArray objectAtIndex:3],[outputArray objectAtIndex:3],[debugImageArray objectAtIndex:4],[outputArray objectAtIndex:4]);
 }
 /*Global*/
 -(IBAction)processActionSelectorChange:(id)sender{

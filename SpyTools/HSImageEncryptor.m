@@ -185,7 +185,7 @@
                 readComponent = characterToBinaryArray(readTempPixelValues[k], numberOfBits);
                 [readCharacterBinary insertObject:[readComponent objectAtIndex:0] atIndex:readCharacterIndex];
                 
-                if (readCharacterIndex>=7) {
+                if (readCharacterIndex>=(numberOfBits-1)) {
                     [readString addObject:[NSNumber numberWithInt:binaryArrayToCharacter(readCharacterBinary, numberOfBits)]];
                     readCharacterIndex = 0;
                 }else {
